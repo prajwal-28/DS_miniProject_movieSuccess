@@ -11,28 +11,28 @@
 
 "use strict";
 
-const API_URL = "http://127.0.0.1:5000/predict";
+const API_URL = "https://moviesuccess-predictor.onrender.com/predict";
 
 // ── DOM References ─────────────────────────────────────────────
-const form        = document.getElementById("predict-form");
-const submitBtn   = document.getElementById("predict-btn");
+const form = document.getElementById("predict-form");
+const submitBtn = document.getElementById("predict-btn");
 const errorBanner = document.getElementById("error-banner");
-const errorText   = document.getElementById("error-text");
-const resultCard  = document.getElementById("result-card");
-const resultIcon  = document.getElementById("result-icon");
+const errorText = document.getElementById("error-text");
+const resultCard = document.getElementById("result-card");
+const resultIcon = document.getElementById("result-icon");
 const resultVerdict = document.getElementById("result-verdict");
 const probSection = document.getElementById("prob-section");
-const roiHint     = document.getElementById("roi-hint");
-const roiCalcVal  = document.getElementById("roi-calc-val");
-const roiInput    = document.getElementById("roi");
+const roiHint = document.getElementById("roi-hint");
+const roiCalcVal = document.getElementById("roi-calc-val");
+const roiInput = document.getElementById("roi");
 const budgetInput = document.getElementById("budget");
-const revenueInput= document.getElementById("revenue");
+const revenueInput = document.getElementById("revenue");
 
 // ── Config Maps ─────────────────────────────────────────────────
 const RESULT_CONFIG = {
-  Hit:     { cls: "hit",  icon: "🏆", barClass: "hit-bar" },
-  Average: { cls: "avg",  icon: "🎭", barClass: "avg-bar" },
-  Flop:    { cls: "flop", icon: "💸", barClass: "flop-bar" },
+  Hit: { cls: "hit", icon: "🏆", barClass: "hit-bar" },
+  Average: { cls: "avg", icon: "🎭", barClass: "avg-bar" },
+  Flop: { cls: "flop", icon: "💸", barClass: "flop-bar" },
 };
 
 const REQUIRED_FIELDS = [
@@ -46,14 +46,14 @@ const REQUIRED_FIELDS = [
  * showing a tooltip with the computed value.
  */
 function updateRoiHint() {
-  const budget  = parseFloat(budgetInput.value);
+  const budget = parseFloat(budgetInput.value);
   const revenue = parseFloat(revenueInput.value);
 
   if (budget > 0 && revenue >= 0) {
     const roi = (revenue / budget).toFixed(4);
-    roiInput.value   = roi;
+    roiInput.value = roi;
     roiCalcVal.textContent = roi;
-    roiHint.style.display  = "block";
+    roiHint.style.display = "block";
   } else {
     roiHint.style.display = "none";
   }
@@ -150,7 +150,7 @@ function showResult(prediction, probabilities) {
   resultCard.classList.add(cfg.cls, "visible");
   resultCard.style.display = "block";
 
-  resultIcon.textContent    = cfg.icon;
+  resultIcon.textContent = cfg.icon;
   resultVerdict.textContent = prediction;
 
   // Probability bars
@@ -209,23 +209,23 @@ async function submitPrediction(event) {
 
   // Build payload
   const payload = {
-    budget:  parseFloat(document.getElementById("budget").value),
+    budget: parseFloat(document.getElementById("budget").value),
     revenue: parseFloat(document.getElementById("revenue").value),
-    rating:  parseFloat(document.getElementById("rating").value),
-    votes:   parseFloat(document.getElementById("votes").value),
+    rating: parseFloat(document.getElementById("rating").value),
+    votes: parseFloat(document.getElementById("votes").value),
     runtime: parseFloat(document.getElementById("runtime").value),
-    year:    parseInt(document.getElementById("year").value, 10),
-    roi:     parseFloat(document.getElementById("roi").value),
-    genre:   document.getElementById("genre").value,
+    year: parseInt(document.getElementById("year").value, 10),
+    roi: parseFloat(document.getElementById("roi").value),
+    genre: document.getElementById("genre").value,
   };
 
   setLoading(true);
 
   try {
     const response = await fetch(API_URL, {
-      method:  "POST",
+      method: "POST",
       headers: { "Content-Type": "application/json" },
-      body:    JSON.stringify(payload),
+      body: JSON.stringify(payload),
     });
 
     const data = await response.json();
@@ -262,7 +262,7 @@ async function submitPrediction(event) {
 REQUIRED_FIELDS.forEach((fieldId) => {
   const el = document.getElementById(fieldId);
   if (el) {
-    el.addEventListener("input",  () => el.classList.remove("invalid"));
+    el.addEventListener("input", () => el.classList.remove("invalid"));
     el.addEventListener("change", () => el.classList.remove("invalid"));
   }
 });
